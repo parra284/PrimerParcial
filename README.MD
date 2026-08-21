@@ -13,6 +13,64 @@
 
 ---
 
+# 0. CÓMO EJECUTAR ESTE PROYECTO (Entregable 4)
+
+**Guía completa de instalación, ejecución, pruebas e interpretación del
+resultado: [`project/README.md`](project/README.md).**
+Diseño del agente: [`project/design.md`](project/design.md).
+
+**Requisitos:** Python ≥ 3.10 (probado con 3.13.7) y Node.js ≥ 20 (probado con
+22.18.0 / npm 10.9.3).
+
+**Arranque rápido — dos terminales:**
+
+```bash
+# Terminal 1 — backend (debe quedar en el puerto 8000: el frontend hace proxy ahí)
+cd project/backend
+python -m venv .venv
+.\.venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn main:app --app-dir src --port 8000
+```
+
+```bash
+# Terminal 2 — frontend
+cd project/frontend
+npm install
+npm run dev
+```
+
+Abrir <http://localhost:5173> y pulsar **▶ EXECUTE PLAN**. La primera respuesta
+tarda ~13 s: el agente explora ~690 000 nodos para garantizar el plan óptimo
+(35 operaciones, costo total **80**). No está colgado.
+
+**Probar la misión sin frontend** (instancia mínima, responde en menos de un
+segundo):
+
+```bash
+cd project
+curl -s -X POST http://127.0.0.1:8000/api/solve \
+  -H "Content-Type: application/json" --data @scenarios/ejemplo_minimo.json
+```
+
+**Ejecutar las pruebas del Entregable 3** (los cinco casos de validación):
+
+```bash
+cd project/backend
+python tests/run_entregable3.py
+```
+
+**Dónde está cada entregable:**
+
+| Entregable | Ubicación |
+|---|---|
+| 1 — Diseño de IA | [`project/design.md`](project/design.md) |
+| 2 — Agente | Motor: [`project/backend/src/agent/`](project/backend/src/agent/) · Traducción visual: [`project/backend/src/contract/`](project/backend/src/contract/) · Endpoint: [`project/backend/src/main.py`](project/backend/src/main.py) |
+| 3 — Validación | [`project/backend/tests/`](project/backend/tests/) y las instancias `scenarios/caso*.json` |
+| 4 — README | [`project/README.md`](project/README.md) y esta sección |
+
+---
+
 # 1. PROPÓSITO DEL PARCIAL
 
 En este parcial no se evaluará únicamente la capacidad de escribir código.

@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "id": "caso2_bateria_relevante",
+    "title": "Caso 2 — Informacion relevante (la bateria distingue estados)",
+    "description": "La zona B se alcanza por dos rutas que dejan la MISMA configuracion fisica <pos,P,R,E,O> con baterias distintas: directo A->B (g=2, b=10) o pasando por el cargador A->C->B (g=7, b=38). Ninguno domina al otro (b1>=b2 pero g1>g2), asi que deben seguir siendo estados DISTINTOS. El corredor B->G cuesta 30: solo el nodo recargado puede cruzarlo. Si la busqueda colapsara ambos estados por su configuracion fisica, la mision quedaria sin solucion. Instancia de prueba del motor: no incluye 'layout' porque no se visualiza en 3D."
+  },
+  "robot": {
+    "start": "A",
+    "battery_max": 40,
+    "battery_start": 12,
+    "cargo_capacity": 1
+  },
+  "zones": [
+    { "id": "A", "name": "ENTRADA", "recharge": false },
+    { "id": "B", "name": "CRUCE", "recharge": false },
+    { "id": "C", "name": "CARGADOR", "recharge": true },
+    { "id": "G", "name": "SALA_REACTOR", "recharge": false }
+  ],
+  "corridors": [
+    { "from": "A", "to": "B", "cost": 2, "door": null },
+    { "from": "B", "to": "A", "cost": 2, "door": null },
+    { "from": "A", "to": "C", "cost": 2, "door": null },
+    { "from": "C", "to": "A", "cost": 2, "door": null },
+    { "from": "C", "to": "B", "cost": 2, "door": null },
+    { "from": "B", "to": "C", "cost": 2, "door": null },
+    { "from": "B", "to": "G", "cost": 30, "door": null },
+    { "from": "G", "to": "B", "cost": 30, "door": null }
+  ],
+  "doors": [],
+  "keys": [],
+  "tools": [],
+  "materials": [],
+  "panels": [],
+  "stations": [
+    { "id": "REACTOR", "kind": "generator", "zone": "G", "state": "OFFLINE", "requires": {} }
+  ],
+  "chargers": [{ "id": "CHARGER_C", "zone": "C" }],
+  "goal": { "stations_online": ["REACTOR"] },
+  "action_costs": { "pickup": 1, "drop": 1, "interact": 2, "recharge": 3 }
+}

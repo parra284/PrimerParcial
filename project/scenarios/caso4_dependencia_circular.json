@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "id": "caso4_dependencia_circular",
+    "title": "Caso 4 — Sin solucion por dependencia circular",
+    "description": "NUCLEO exige que RESPALDO este ONLINE y RESPALDO exige que NUCLEO este ONLINE: ninguna de las dos podra activarse jamas. Todo lo demas SI es alcanzable (dos llaves, dos puertas, dos herramientas, dos materiales, dos paneles reparables, cargador y capacidad 2, que obliga a soltar objetos), de modo que la busqueda tiene que recorrer un espacio de estados real antes de concluir. Debe terminar con OPEN vacio y devolver FAILURE, no quedarse explorando. Instancia de prueba del motor: no incluye 'layout' porque no se visualiza en 3D."
+  },
+  "robot": {
+    "start": "Z1",
+    "battery_max": 40,
+    "battery_start": 40,
+    "cargo_capacity": 2
+  },
+  "zones": [
+    { "id": "Z1", "name": "ENTRADA", "recharge": false },
+    { "id": "Z2", "name": "ALMACEN", "recharge": false },
+    { "id": "Z3", "name": "TALLER", "recharge": true },
+    { "id": "Z4", "name": "SALA_NUCLEO", "recharge": false }
+  ],
+  "corridors": [
+    { "from": "Z1", "to": "Z2", "cost": 3, "door": "D1" },
+    { "from": "Z2", "to": "Z1", "cost": 3, "door": "D1" },
+    { "from": "Z2", "to": "Z3", "cost": 4, "door": null },
+    { "from": "Z3", "to": "Z2", "cost": 4, "door": null },
+    { "from": "Z1", "to": "Z3", "cost": 7, "door": null },
+    { "from": "Z3", "to": "Z1", "cost": 7, "door": null },
+    { "from": "Z3", "to": "Z4", "cost": 3, "door": "D2" },
+    { "from": "Z4", "to": "Z3", "cost": 3, "door": "D2" }
+  ],
+  "doors": [
+    { "id": "D1", "color": "cyan", "key": "K1", "state": "CLOSED", "between": ["Z1", "Z2"] },
+    { "id": "D2", "color": "yellow", "key": "K2", "state": "CLOSED", "between": ["Z3", "Z4"] }
+  ],
+  "keys": [
+    { "id": "K1", "color": "cyan", "zone": "Z1", "weight": 1 },
+    { "id": "K2", "color": "yellow", "zone": "Z2", "weight": 1 }
+  ],
+  "tools": [
+    { "id": "SOLDADOR", "repairs": "CIRCUIT", "zone": "Z2", "weight": 1 },
+    { "id": "DESTORNILLADOR", "repairs": "WIRING", "zone": "Z3", "weight": 1 }
+  ],
+  "materials": [
+    { "type": "PLACA", "zone": "Z2", "count": 1, "weight": 1 },
+    { "type": "TORNILLO", "zone": "Z1", "count": 1, "weight": 1 }
+  ],
+  "panels": [
+    {
+      "id": "PANEL_1",
+      "zone": "Z3",
+      "damage": "CIRCUIT",
+      "requires": { "tool": "SOLDADOR", "material": "PLACA" },
+      "state": "DAMAGED"
+    },
+    {
+      "id": "PANEL_2",
+      "zone": "Z4",
+      "damage": "WIRING",
+      "requires": { "tool": "DESTORNILLADOR", "material": "TORNILLO" },
+      "state": "DAMAGED"
+    }
+  ],
+  "stations": [
+    {
+      "id": "NUCLEO",
+      "kind": "generator",
+      "zone": "Z4",
+      "state": "OFFLINE",
+      "requires": { "panels_ok": ["PANEL_1", "PANEL_2"], "stations_online": ["RESPALDO"] }
+    },
+    {
+      "id": "RESPALDO",
+      "kind": "command",
+      "zone": "Z2",
+      "state": "OFFLINE",
+      "requires": { "stations_online": ["NUCLEO"] }
+    }
+  ],
+  "chargers": [{ "id": "CHARGER_Z3", "zone": "Z3" }],
+  "goal": { "stations_online": ["NUCLEO"] },
+  "action_costs": { "pickup": 1, "drop": 1, "interact": 2, "recharge": 3 }
+}

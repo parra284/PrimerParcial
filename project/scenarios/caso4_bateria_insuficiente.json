@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "id": "caso4_bateria_insuficiente",
+    "title": "Caso 4 (variante) — Sin solucion por bateria insuficiente",
+    "description": "El unico corredor hacia la estacion cuesta 30 y el robot arranca con 10 de bateria, sin ningun cargador en el mapa. Applicable(s0) es vacio: OPEN se vacia en la primera extraccion y el motor devuelve FAILURE de inmediato. Es el otro regimen de terminacion frente a caso4_dependencia_circular (ahi agota un espacio grande; aqui, uno vacio). Instancia de prueba del motor: no incluye 'layout' porque no se visualiza en 3D."
+  },
+  "robot": {
+    "start": "Z1",
+    "battery_max": 100,
+    "battery_start": 10,
+    "cargo_capacity": 1
+  },
+  "zones": [
+    { "id": "Z1", "name": "ENTRADA", "recharge": false },
+    { "id": "Z2", "name": "SALA_REMOTA", "recharge": false }
+  ],
+  "corridors": [
+    { "from": "Z1", "to": "Z2", "cost": 30, "door": null },
+    { "from": "Z2", "to": "Z1", "cost": 30, "door": null }
+  ],
+  "doors": [],
+  "keys": [],
+  "tools": [],
+  "materials": [],
+  "panels": [],
+  "stations": [
+    { "id": "BALIZA", "kind": "command", "zone": "Z2", "state": "OFFLINE", "requires": {} }
+  ],
+  "chargers": [],
+  "goal": { "stations_online": ["BALIZA"] },
+  "action_costs": { "pickup": 1, "drop": 1, "interact": 2, "recharge": 3 }
+}

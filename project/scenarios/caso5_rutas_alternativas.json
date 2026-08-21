@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "id": "caso5_rutas_alternativas",
+    "title": "Caso 5 — Rutas alternativas al mismo estado del mundo",
+    "description": "Diamante A->B->G y A->C->G. Las dos rutas usan el MISMO numero de acciones (6) y dejan EXACTAMENTE la misma configuracion fisica <pos,P,R,E,O>: robot en G, PANEL_G reparado, TORRETA ONLINE, LLAVE_INGLESA en inventario y PIEZA consumida. Solo cambia el costo: 10 por B y 16 por C, y ambas son ejecutables con la bateria disponible. Como el unico discriminante es g(n), el test comprueba que UCS conserva la ruta por B y que la ruta por C queda dominada (misma configuracion fisica, menos bateria y mayor costo). Instancia de prueba del motor: no incluye 'layout' porque no se visualiza en 3D."
+  },
+  "robot": {
+    "start": "A",
+    "battery_max": 60,
+    "battery_start": 60,
+    "cargo_capacity": 2
+  },
+  "zones": [
+    { "id": "A", "name": "ENTRADA", "recharge": false },
+    { "id": "B", "name": "RAMAL_CORTO", "recharge": false },
+    { "id": "C", "name": "RAMAL_LARGO", "recharge": false },
+    { "id": "G", "name": "SALA_ARTILLERIA", "recharge": false }
+  ],
+  "corridors": [
+    { "from": "A", "to": "B", "cost": 2, "door": null },
+    { "from": "B", "to": "A", "cost": 2, "door": null },
+    { "from": "B", "to": "G", "cost": 2, "door": null },
+    { "from": "G", "to": "B", "cost": 2, "door": null },
+    { "from": "A", "to": "C", "cost": 5, "door": null },
+    { "from": "C", "to": "A", "cost": 5, "door": null },
+    { "from": "C", "to": "G", "cost": 5, "door": null },
+    { "from": "G", "to": "C", "cost": 5, "door": null }
+  ],
+  "doors": [],
+  "keys": [],
+  "tools": [{ "id": "LLAVE_INGLESA", "repairs": "WIRING", "zone": "A", "weight": 1 }],
+  "materials": [{ "type": "PIEZA", "zone": "A", "count": 1, "weight": 1 }],
+  "panels": [
+    {
+      "id": "PANEL_G",
+      "zone": "G",
+      "damage": "WIRING",
+      "requires": { "tool": "LLAVE_INGLESA", "material": "PIEZA" },
+      "state": "DAMAGED"
+    }
+  ],
+  "stations": [
+    {
+      "id": "TORRETA",
+      "kind": "artillery",
+      "zone": "G",
+      "state": "OFFLINE",
+      "requires": { "panels_ok": ["PANEL_G"] }
+    }
+  ],
+  "chargers": [],
+  "goal": { "stations_online": ["TORRETA"] },
+  "action_costs": { "pickup": 1, "drop": 1, "interact": 2, "recharge": 3 }
+}

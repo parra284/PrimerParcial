@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "id": "caso3_costo_vs_pasos",
+    "title": "Caso 3 — Menos acciones no es menor costo",
+    "description": "Dos planes legales llegan a la meta: el atajo A->G cuesta 20 y usa 2 acciones (MOVE + ACTIVATE); el rodeo A->B->C->G cuesta 3 y usa 4 acciones. UCS debe devolver el de 4 acciones y costo 5, no el de 2 acciones y costo 22, porque g(n) mide bateria consumida y no pasos. Instancia de prueba del motor: no incluye 'layout' porque no se visualiza en 3D."
+  },
+  "robot": {
+    "start": "A",
+    "battery_max": 100,
+    "battery_start": 100,
+    "cargo_capacity": 1
+  },
+  "zones": [
+    { "id": "A", "name": "ENTRADA", "recharge": false },
+    { "id": "B", "name": "PASILLO_1", "recharge": false },
+    { "id": "C", "name": "PASILLO_2", "recharge": false },
+    { "id": "G", "name": "SALA_MANDO", "recharge": false }
+  ],
+  "corridors": [
+    { "from": "A", "to": "G", "cost": 20, "door": null },
+    { "from": "G", "to": "A", "cost": 20, "door": null },
+    { "from": "A", "to": "B", "cost": 1, "door": null },
+    { "from": "B", "to": "A", "cost": 1, "door": null },
+    { "from": "B", "to": "C", "cost": 1, "door": null },
+    { "from": "C", "to": "B", "cost": 1, "door": null },
+    { "from": "C", "to": "G", "cost": 1, "door": null },
+    { "from": "G", "to": "C", "cost": 1, "door": null }
+  ],
+  "doors": [],
+  "keys": [],
+  "tools": [],
+  "materials": [],
+  "panels": [],
+  "stations": [
+    { "id": "MANDO", "kind": "command", "zone": "G", "state": "OFFLINE", "requires": {} }
+  ],
+  "chargers": [],
+  "goal": { "stations_online": ["MANDO"] },
+  "action_costs": { "pickup": 1, "drop": 1, "interact": 2, "recharge": 3 }
+}

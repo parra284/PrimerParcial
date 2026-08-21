@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "id": "ejemplo_minimo",
+    "title": "Ejemplo minimo para POST /api/solve",
+    "description": "Version reducida de scenario.json con la misma estructura: dos zonas, una puerta con llave, un panel que exige herramienta + material y una estacion objetivo. Capacidad 2, asi que el robot debe soltar la llave ya usada para poder cargar herramienta y material. Sirve para probar el endpoint en menos de un segundo. No incluye 'layout': el frontend 3D siempre usa scenario.json."
+  },
+  "robot": {
+    "start": "Z1",
+    "battery_max": 20,
+    "battery_start": 20,
+    "cargo_capacity": 2
+  },
+  "zones": [
+    { "id": "Z1", "name": "CONTROL", "recharge": false },
+    { "id": "Z2", "name": "GENERATOR_BAY", "recharge": false }
+  ],
+  "corridors": [
+    { "from": "Z1", "to": "Z2", "cost": 4, "door": "DOOR1" },
+    { "from": "Z2", "to": "Z1", "cost": 4, "door": "DOOR1" }
+  ],
+  "doors": [
+    { "id": "DOOR1", "color": "cyan", "key": "KEY1", "state": "CLOSED", "between": ["Z1", "Z2"] }
+  ],
+  "keys": [{ "id": "KEY1", "color": "cyan", "zone": "Z1", "weight": 1 }],
+  "tools": [{ "id": "MULTITOOL", "repairs": "ELECTRICAL", "zone": "Z1", "weight": 1 }],
+  "materials": [{ "type": "FUSE", "zone": "Z1", "count": 1, "weight": 1 }],
+  "panels": [
+    {
+      "id": "PANEL_A",
+      "zone": "Z2",
+      "damage": "ELECTRICAL",
+      "requires": { "tool": "MULTITOOL", "material": "FUSE" },
+      "state": "DAMAGED"
+    }
+  ],
+  "stations": [
+    {
+      "id": "GENERATOR",
+      "kind": "generator",
+      "zone": "Z2",
+      "state": "OFFLINE",
+      "requires": { "panels_ok": ["PANEL_A"] }
+    }
+  ],
+  "chargers": [],
+  "goal": { "stations_online": ["GENERATOR"] },
+  "action_costs": { "pickup": 1, "drop": 1, "interact": 2, "recharge": 3 }
+}
